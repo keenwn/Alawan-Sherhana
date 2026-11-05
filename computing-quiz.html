@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fundamentals of Computing Quiz 💻</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .quiz-container {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 20px;
+      margin-top: 0;
+    }
+    .progress {
+      font-size: 15px;
+      color: #7f8c8d;
+      margin-bottom: 15px;
+    }
+    .question {
+      font-size: 17px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin: 20px 0;
+      line-height: 1.5;
+    }
+    .options {
+      text-align: left;
+      margin: 10px 0;
+    }
+    .option {
+      padding: 12px;
+      margin: 8px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 15px;
+    }
+    .option:hover {
+      border-color: #4facfe;
+      background: #f0f9ff;
+    }
+    .option.correct {
+      background: #d4edda;
+      border-color: #28a745;
+      color: #155724;
+    }
+    .option.wrong {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+    }
+    button {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: white;
+      font-size: 16px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .score {
+      font-size: 26px;
+      color: #4facfe;
+      margin: 15px 0;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h1>💻 Fundamentals of Computing Quiz</h1>
+  <div class="progress" id="progress">Question 1 of 20</div>
+  
+  <div id="quiz-area">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <button id="nextBtn" class="hidden" onclick="nextQuestion()">Next ➡️</button>
+  </div>
+  
+  <div class="result hidden" id="result">
+    🎉 Quiz Complete!
+    <div class="score" id="finalScore"></div>
+    <p id="message" style="font-size: 15px; color: #555;"></p>
+    <button onclick="location.reload()" style="margin-top:10px;">Restart Quiz 🔄</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { q: "What is the brain of the computer?", options: ["RAM", "CPU", "Hard Drive", "Monitor"], answer: 1 },
+  { q: "Which device is used to type text into the computer?", options: ["Mouse", "Printer", "Keyboard", "Scanner"], answer: 2 },
+  { q: "What does CPU stand for?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Process Utility", "Control Processing Unit"], answer: 0 },
+  { q: "Which of these is temporary memory that clears when you turn off the computer?", options: ["Hard Disk", "SSD", "ROM", "RAM"], answer: 3 },
+  { q: "What does RAM stand for?", options: ["Read Access Memory", "Random Access Memory", "Read Only Memory", "Random Automatic Memory"], answer: 1 },
+  { q: "Which of these is NOT an operating system?", options: ["Windows", "macOS", "Android", "Microsoft Office"], answer: 3 },
+  { q: "What is the smallest unit of digital data?", options: ["Byte", "Bit", "Kilobyte", "Megabyte"], answer: 1 },
+  { q: "How many bits are in 1 byte?", options: ["4", "8", "16", "32"], answer: 1 },
+  { q: "Which device displays information from the computer?", options: ["Keyboard", "Monitor", "Mouse", "Speaker"], answer: 1 },
+  { q: "What does GUI stand for?", options: ["General User Interface", "Graphical User Interface", "Graphic Universal Input", "General Utility Interface"], answer: 1 },
+  { q: "Which software controls the computer's hardware and resources?", options: ["Web Browser", "Operating System", "Word Processor", "Antivirus"], answer: 1 },
+  { q: "Which of these is an example of secondary storage?", options: ["RAM", "Cache", "Hard Disk", "CPU registers"], answer: 2 },
+  { q: "What is a set of instructions that tells a computer what to do?", options: ["Hardware", "Software", "Firmware", "Manual"], answer: 1 },
+  { q: "Which input device moves a cursor on the screen?", options: ["Keyboard", "Mouse", "Scanner", "Microphone"], answer: 1 },
+  { q: "What does USB stand for?", options: ["Universal Serial Bus", "United Service Block", "Universal System Bridge", "Ultra Speed Bus"], answer: 0 },
+  { q: "Which number system do computers use internally?", options: ["Decimal", "Hexadecimal", "Binary", "Octal"], answer: 2 },
+  { q: "1 Kilobyte (KB) is approximately equal to:", options: ["1000 bytes", "1024 bytes", "1024 KB", "1000 bits"], answer: 1 },
+  { q: "Which of these is considered the 'brain' of the computer?", options: ["RAM", "CPU", "Hard Drive", "Motherboard"], answer: 1 },
+  { q: "What is the main circuit board inside a computer called?", options: ["Hard Drive", "RAM", "Motherboard", "Processor"], answer: 2 },
+  { q: "Which of these can execute instructions very quickly and accurately?", options: ["Computer", "Printer", "Scanner", "Projector"], answer: 0 }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+
+function showQuestion() {
+  answered = false;
+  document.getElementById('progress').textContent = `Question ${currentQ + 1} of 20`;
+  document.getElementById('question').textContent = questions[currentQ].q;
+  document.getElementById('nextBtn').classList.add('hidden');
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quiz-area').classList.remove('hidden');
+  
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
+  
+  questions[currentQ].options.forEach((opt, index) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.textContent = `${String.fromCharCode(65 + index)}. ${opt}`;
+    div.onclick = () => selectAnswer(index);
+    optionsDiv.appendChild(div);
+  });
+}
+
+function selectAnswer(selected) {
+  if (answered) return;
+  answered = true;
+  
+  const options = document.querySelectorAll('.option');
+  const correct = questions[currentQ].answer;
+  
+  options[correct].classList.add('correct');
+  if (selected !== correct) {
+    options[selected].classList.add('wrong');
+  } else {
+    score++;
+  }
+  
+  document.getElementById('nextBtn').classList.remove('hidden');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz-area').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  
+  const percentage = Math.round((score / 20) * 100);
+  let message = '';
+  if (percentage === 100) message = '🎉 Perfect score! You are a computing genius!';
+  else if (percentage >= 80) message = '🌟 Excellent! You know your computing basics well!';
+  else if (percentage >= 60) message = '👍 Good job! Keep studying!';
+  else message = '💪 Keep practicing! You can do better next time!';
+  
+  document.getElementById('finalScore').innerHTML = `${score} / 20<br>${percentage}%`;
+  document.getElementById('message').textContent = message;
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>
